@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cac_1 = require("cac");
 const dev_1 = require("./dev");
 const path_1 = __importDefault(require("path"));
+const build_1 = require("./build");
 const version = require('../../package.json').version;
 const cli = (0, cac_1.cac)('island').version(version).help();
 cli
@@ -21,6 +22,12 @@ cli
 cli
     .command('build [root]', 'build for production')
     .action(async (root) => {
-    console.log('build', root);
+    try {
+        root = path_1.default.resolve(root);
+        await (0, build_1.build)(root);
+    }
+    catch (e) {
+        console.log(e);
+    }
 });
 cli.parse();
